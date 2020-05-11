@@ -3,7 +3,7 @@ const app = express();
 const bodyParser = require("body-parser");
 const bcrypt = require('bcrypt');
 const exphbs = require("express-handlebars");
-const cookies=require("cookie-parser");
+const cookies = require("cookie-parser");
 const userData =  require("./data/login");
 const session = require('express-session');
 const reviews = require("./data/review");
@@ -115,7 +115,8 @@ app.use("/",async (req,res,next)=>{
 	 else {
 	  if (await bcrypt.compareSync(password,User.hashedPassword)) {
 		req.session.user=User;
-		
+
+
 	  }
 	  else{
 		  res.status(401).render('login', {title:"Login",
@@ -131,11 +132,13 @@ app.use("/",async (req,res,next)=>{
 	}
 	else {
 	  req.session.flag=true;
-	  res.cookie("AuthCookie",User._id);
+	  //console.log(User._id);
+	  //console.log(req.session.user)
+	  res.cookie("Auth_Cookie",User._id);
 	  res.render("user",{username:User.username , title:"Devices", session:true});
 	}
-  
-   }
+    
+	}
   
   
   });
@@ -222,11 +225,21 @@ app.get("/search", async (req, res) => {
 });
 
 app.get("/reviews", async (req, res) => {
-	console.log(req.cookies.AuthCookie);
-	let user = await getUser(req.cookies.AuthCookie);
+	//console.log(req.cookies.Auth_Cookie);
+	let user = await getUser(req.cookies.Auth_Cookie);
+	//console.log(user);
 
+	try{
 	let allReviews = await reviews.getAllReview()
-	res.render("review");
+	console.log(allReviews);
+	res.render("reviews",{
+		title: "Review page",
+		userId: user._id,
+		posts: allReviews
+	});
+	}catch(e){
+		console.log(e);
+	}
 });
 
 app.post("/reviews/newReview", async (req, res) => {

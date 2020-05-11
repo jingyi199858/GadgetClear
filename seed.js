@@ -12,16 +12,18 @@ async function main(){
     const createuser = await user.createUser("aaaa","aaaa@yahoo.com","aaaa");
     const id = createReview._id;
     const userid = createuser._id;
+    console.log(userid)
 
     const user1 = await user.getUserById(userid);
-    console.log(await user.checkUser("aaaa"));
+    //console.log(await user.checkUser("aaaa"));
 
+    console.log("the user is ");
     console.log(user1);
 
     const all = await reviews.getAllReview();
     //console.log(createReview);
-    console.log(all);
-    console.log(id);
+    //console.log(all);
+    //console.log(id);
 
     //const removereview = await reviews.deleteAllReviews();
     console.log("Comment deleted");

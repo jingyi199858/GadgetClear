@@ -1,7 +1,7 @@
 const bcrypt = require("bcrypt");
 const mongoCollections = require('../config/mongoCollections');
 //const albums = mongoCollections.albums;
-const users= mongoCollections.users;
+const users = mongoCollections.users;
 const { ObjectId } = require('mongodb')
 
 
@@ -63,11 +63,11 @@ else{
  }
 
  async function getUserById(id) {
+	console.log(id);
     const userCollection = await users();
-    const user = await userCollection.findOne({_id: id});
-
-    if (!user) throw 'User not found';
-    return user;
+    const user1 = await userCollection.find({ _id: id });
+    if (!user1) throw 'User not found';
+    return user1;
   }
 
 module.exports={createUser,checkUser,checkEmail, getUserById};

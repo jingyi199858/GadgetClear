@@ -8,7 +8,7 @@ function postNewPost(userId){
 		if (this.readyState == 4 && this.status == 200) {
 			console.log("It worked!");
 			alert("Post has successfully been added!");
-			window.location.replace("/review");
+			window.location.replace("/reviews");
 		}else if(this.readyState == 4 && this.status == 400){
 			alert("There was a problem adding this post. Please try again, or refresh the page.");
 		}else{
@@ -17,7 +17,7 @@ function postNewPost(userId){
 		}
 	};
 
-    xhttp.open("POST", "/review/newReview", true);
+    xhttp.open("POST", "/reviews/newReview", true);
 	xhttp.setRequestHeader("Content-type", "application/json");
 	var myData = {};
 	myData.userId = userId;
