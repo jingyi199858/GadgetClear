@@ -26,7 +26,10 @@ async function createUser(username,email,password){
 		//const newId = insertInfo.insertedId;
 
 		
-		return true;
+		const newId = insertInfo.insertedId;
+
+        const user = await this.getUserById(newId);
+        return user;
 }
 
 //checks for username in document and returns userdata with that username
@@ -59,4 +62,12 @@ else{
 }
  }
 
-module.exports={createUser,checkUser,checkEmail};
+ async function getUserById(id) {
+    const userCollection = await users();
+    const user = await userCollection.findOne({_id: id});
+
+    if (!user) throw 'User not found';
+    return user;
+  }
+
+module.exports={createUser,checkUser,checkEmail, getUserById};

@@ -1,0 +1,25 @@
+<div class="new-post">
+		<h2 id="favoriteIcon" class="bad-button-thats-not-a-button" onclick="newPost('{{userId}}')">New post</h2>
+</div>
+
+<hr>
+<div id="postParent">
+	{{#each reviews}}
+		<div class="post">
+			<div>
+				<h2 style="display: inline-block;"> {{this.title}} </h2>
+				<i class="material-icons" onclick="removePost('{{this.author}}','{{../userId}}','{{this._id}}')">clear</i>
+			</div>
+			<h3 class="post-author">by {{this.authorName}} </h3>
+			<p>{{this.content}}</p>
+			<hr>
+		</div>
+	{{else}}
+		<div class="post">
+			<h2>Currently no posts! You should be the first one!</h2>
+		</div>
+	
+	{{/each}}
+</div>
+
+<script src="/public/js/reviews.js"></script>

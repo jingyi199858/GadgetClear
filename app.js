@@ -3,14 +3,17 @@ const app = express();
 const bodyParser = require("body-parser");
 const bcrypt = require('bcrypt');
 const exphbs = require("express-handlebars");
+const cookies=require("cookie-parser");
 const userData =  require("./data/login");
 const session = require('express-session');
+const reviews = require("./data/review");
 
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded(
   {extended:true}
 ));
+app.use(cookies());
 const static = express.static(__dirname + '/public');
 
 app.use(session({
@@ -128,6 +131,7 @@ app.use("/",async (req,res,next)=>{
 	}
 	else {
 	  req.session.flag=true;
+	  res.cookie("AuthCookie",User._id);
 	  res.render("user",{username:User.username , title:"Devices", session:true});
 	}
   
@@ -218,13 +222,57 @@ app.get("/search", async (req, res) => {
 });
 
 app.get("/reviews", async (req, res) => {
+	console.log(req.cookies.AuthCookie);
+	let user = await getUser(req.cookies.AuthCookie);
+
+	let allReviews = await reviews.getAllReview()
 	res.render("review");
+});
+
+app.post("/reviews/newReview", async (req, res) => {
+
+	var user = req.body.userId;
+	var postTitle = req.body.postTitle;
+	var postContent = req.body.postContent;
+
+	try{
+		var addedPost = await reviews.createReviews(postTitle,user,postContent);
+		res.status(200).end();
+	}catch(e){
+		console.log("There was an error! " + e);
+		res.status(400).end();
+	}
+
+});
+
+app.post("/forum/removeReview", async (req, res) => {
+	var postId = req.body.postId;
+
+	try{
+		var removedPost = await forumAPI.deletePost(postId);
+		res.status(200).end();
+	}catch(e){
+		console.log("There was an error! " + e);
+		res.status(400).end();
+	}
+
 });
 
 
 app.use("*",async (req,res)=>{
 	res.status(404).json({error:"Page Not Found"});
   });
+
+async function getUser(id){
+	if(!id)
+		return undefined;
+	try{
+		let user = await userData.getUserById(id);
+		return user;
+	}catch(e){
+		console.log(e)
+	}
+}
 
 
   
