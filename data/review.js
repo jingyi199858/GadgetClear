@@ -1,17 +1,18 @@
 const mongoCollections = require('../config/mongoCollections');
 const reviews = mongoCollections.reviews;
 const { ObjectId } = require("mongodb");
-const user = mongoCollections.users;
+const user = require('./login.js');
 
-async function createReviews(device_name, username, comment){
+async function createReviews(device_name, id, comment){
     if(arguments.length < 3) {
         throw "Input not valid";
     }
+    let user1 = await user.getUserById(id);
     const reviewCollection = await reviews();
 
     const newReview = {
         device_name: device_name,
-        username: username,
+        name: user1.username,
         comment: comment
     };
 

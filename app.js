@@ -237,6 +237,7 @@ app.get("/reviews", async (req, res) => {
 		userId: user._id,
 		posts: allReviews
 	});
+	console.log("rendered reviews")
 	}catch(e){
 		console.log(e);
 	}
